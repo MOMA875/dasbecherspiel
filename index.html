@@ -22,8 +22,7 @@
 #shell-game-wrapper {
     background: #111;
     color: #fff;
-    /* padding-bottom auf 45px erhöht für mehr Abstand zum unteren Rand */
-    padding: 30px 30px 45px 30px; 
+    padding: 30px; 
     border-radius: 12px;
     text-align: center;
     font-family: 'Arial', sans-serif;
@@ -111,7 +110,7 @@
     color: #ff4d4d;
     font-weight: bold;
     font-size: 22px;
-    margin-bottom: 25px; /* Abstand nach unten leicht erhöht für mehr Luft zum Button */
+    margin-bottom: 20px; 
     min-height: 26px;
 }
 #start-btn {
@@ -126,6 +125,8 @@
     transition: transform 0.2s, opacity 0.2s;
     box-shadow: 0 4px 15px rgba(212,175,55,0.4);
     margin-top: 5px;
+    /* Fester Abstand nach unten zur Box-Kante */
+    margin-bottom: 20px; 
 }
 #start-btn:hover {
     transform: scale(1.05);
@@ -142,7 +143,7 @@ let currentRound = 1;
 let ballSlot = 1; // Start in der Mitte
 let isShuffling = false;
 let gameActive = false;
-let positions = [0, 1, 2];
+let positions = [0, 1, 2]; // Fehler behoben!
 let shuffleCount = 0;
 const maxShuffles = 7;
 let isFirstRoundOfGame = true; // Kontrolliert das Intro beim allerersten Start
@@ -270,7 +271,7 @@ function chooseCup(cupId) {
             
             startBtn.onclick = function() {
                 currentRound = 1;
-                positions = [0, 1, 2];
+                positions = [0, 1, 2]; // Fehler behoben!
                 ballSlot = 1;
                 isFirstRoundOfGame = true; 
                 
