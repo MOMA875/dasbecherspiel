@@ -29,7 +29,8 @@
     max-width: 600px;
     margin: 20px auto;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    overflow: hidden;
+    /* WICHTIG: overflow entfernt und height auf auto, damit sich die Box anpasst */
+    height: auto; 
 }
 #game-status {
     font-size: 20px;
@@ -110,7 +111,7 @@
     color: #ff4d4d;
     font-weight: bold;
     font-size: 22px;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Abstand leicht verringert */
     min-height: 26px;
 }
 #start-btn {
@@ -124,7 +125,7 @@
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
     box-shadow: 0 4px 15px rgba(212,175,55,0.4);
-    margin-top: 10px;
+    margin-top: 5px; /* Abstand leicht verringert */
 }
 #start-btn:hover {
     transform: scale(1.05);
@@ -157,8 +158,6 @@ function initRound() {
         document.getElementById(`item-${i}`).className = 'item';
     }
     
-    // Zeitlicher Ablauf wie im vorletzten Code: 
-    // Wenn es NICHT die erste Runde nach dem Intro/Reset ist, zeige den Ball sofort nach 600ms an
     if (!isFirstRoundOfGame) {
         setTimeout(() => {
             const initialItem = document.getElementById(`item-${ballSlot}`);
@@ -166,7 +165,6 @@ function initRound() {
             document.getElementById('game-status').innerText = `Runde ${currentRound} von 4: Merk dir den Ball!`;
         }, 600);
     } else {
-        // Bei der allerersten Runde bleibt der Ball unsichtbar, bis der Button geklickt wird
         document.getElementById('game-status').innerText = `Runde ${currentRound} von 4`;
     }
 }
@@ -194,7 +192,7 @@ function startIntro() {
         
         // Nach weiteren 2 Sekunden wandert der Ball unter den Becher und das Spiel beginnt
         setTimeout(() => {
-            isFirstRoundOfGame = false; // Intro beendet, Folgerunden laufen normal
+            isFirstRoundOfGame = false; 
             startGame();
         }, 2000);
         
@@ -205,12 +203,10 @@ function startGame() {
     document.getElementById('start-btn').disabled = true;
     document.getElementById('game-status').innerText = "Konzentration...";
     
-    // Ball verstecken (Becher "virtuell" senken)
     for(let i=0; i<3; i++) {
         document.getElementById(`item-${i}`).classList.remove('visible');
     }
     
-    // Kurz warten, dann mischen starten (Zyklen wie im vorletzten Code)
     setTimeout(() => {
         isShuffling = true;
         shuffleCount = 0;
@@ -256,7 +252,6 @@ function chooseCup(cupId) {
     
     let clickedSlot = cupId; 
     
-    // In Runde 4: Überall Zitronen, kein Ball
     if (currentRound === 4) {
         for(let i=0; i<3; i++) {
             const item = document.getElementById(`item-${i}`);
@@ -265,7 +260,6 @@ function chooseCup(cupId) {
         }
         document.getElementById('game-status').innerText = "Simsalabim! Der Ball ist weg... dafür gibt es Zitronen! 🍋";
         
-        // Nach 2 Sekunden Becher wieder senken
         setTimeout(() => {
             for(let i=0; i<3; i++) {
                 document.getElementById(`cup-${i}`).classList.remove('lifted');
@@ -278,12 +272,11 @@ function chooseCup(cupId) {
                 currentRound = 1;
                 positions = [0, 1, 2];
                 ballSlot = 1;
-                isFirstRoundOfGame = true; // Setzt den Intro-Modus für das neue Spiel zurück
+                isFirstRoundOfGame = true; 
                 
                 startBtn.innerText = "Spiel starten";
                 startBtn.onclick = handleStartButtonClick;
                 
-                // Titel wieder einblenden
                 document.getElementById('magic-title').style.display = 'block';
                 initRound();
             };
@@ -292,7 +285,6 @@ function chooseCup(cupId) {
         return;
     }
     
-    // Runden 1, 2 und 3: Normales Auflösen
     for(let i=0; i<3; i++) {
         document.getElementById(`cup-${i}`).classList.add('lifted');
     }
