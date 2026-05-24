@@ -29,8 +29,7 @@
     max-width: 600px;
     margin: 20px auto;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    /* Box deutlich vergrößert für maximalen Platz unten */
-    height: 470px; 
+    height: 440px; 
     position: relative;
     box-sizing: border-box;
 }
@@ -120,16 +119,17 @@
     background: linear-gradient(135deg, #ffd700, #d4af37);
     color: #111;
     border: none;
-    padding: 12px 30px;
-    font-size: 16px;
+    /* Schmäler gemacht (Padding von 30px auf 15px verringert) */
+    padding: 10px 15px; 
+    /* Schriftart leicht verkleinert für ein kompakteres Design */
+    font-size: 14px; 
     font-weight: bold;
-    border-radius: 25px;
+    border-radius: 20px;
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
     box-shadow: 0 4px 15px rgba(212,175,55,0.4);
-    /* Drückt den Button vom Text weg und sichert Abstand nach unten */
-    margin-top: 10px;
-    margin-bottom: 30px; 
+    margin-top: 5px;
+    margin-bottom: 20px;
 }
 #start-btn:hover {
     transform: scale(1.05);
@@ -146,7 +146,7 @@ let currentRound = 1;
 let ballSlot = 1; 
 let isShuffling = false;
 let gameActive = false;
-let positions = [0, 1, 2]; // Fehler behoben
+let positions = [0, 1, 2]; // Fehler erfolgreich behoben
 let shuffleCount = 0;
 const maxShuffles = 7;
 let isFirstRoundOfGame = true; 
@@ -269,7 +269,7 @@ function chooseCup(cupId) {
             
             startBtn.onclick = function() {
                 currentRound = 1;
-                positions = [0, 1, 2]; // Fehler behoben
+                positions = [0, 1, 2]; // Fehler erfolgreich behoben
                 ballSlot = 1;
                 isFirstRoundOfGame = true; 
                 
