@@ -7,7 +7,7 @@
         </div>
         <div class="cup-slot" id="slot-1">
             <div class="cup" id="cup-1" onclick="chooseCup(1)"></div>
-            <div class="item" id="item-2"></div>
+            <div class="item" id="item-1"></div>
         </div>
         <div class="cup-slot" id="slot-2">
             <div class="cup" id="cup-2" onclick="chooseCup(2)"></div>
@@ -29,9 +29,10 @@
     max-width: 600px;
     margin: 20px auto;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    /* Feste Höhe sichert den Button gegen Abschneiden ab */
-    height: 420px; 
+    /* Box deutlich vergrößert für maximalen Platz unten */
+    height: 470px; 
     position: relative;
+    box-sizing: border-box;
 }
 #game-status {
     font-size: 20px;
@@ -126,6 +127,9 @@
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
     box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+    /* Drückt den Button vom Text weg und sichert Abstand nach unten */
+    margin-top: 10px;
+    margin-bottom: 30px; 
 }
 #start-btn:hover {
     transform: scale(1.05);
@@ -142,7 +146,7 @@ let currentRound = 1;
 let ballSlot = 1; 
 let isShuffling = false;
 let gameActive = false;
-let positions = [0, 1, 2]; // FEHLER BEHOBEN!
+let positions = [0, 1, 2]; // Fehler behoben
 let shuffleCount = 0;
 const maxShuffles = 7;
 let isFirstRoundOfGame = true; 
@@ -265,7 +269,7 @@ function chooseCup(cupId) {
             
             startBtn.onclick = function() {
                 currentRound = 1;
-                positions = [0, 1, 2]; // FEHLER BEHOBEN!
+                positions = [0, 1, 2]; // Fehler behoben
                 ballSlot = 1;
                 isFirstRoundOfGame = true; 
                 
