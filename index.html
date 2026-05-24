@@ -7,7 +7,7 @@
         </div>
         <div class="cup-slot" id="slot-1">
             <div class="cup" id="cup-1" onclick="chooseCup(1)"></div>
-            <div class="item" id="item-1"></div>
+            <div class="item" id="item-2"></div>
         </div>
         <div class="cup-slot" id="slot-2">
             <div class="cup" id="cup-2" onclick="chooseCup(2)"></div>
@@ -29,7 +29,9 @@
     max-width: 600px;
     margin: 20px auto;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    height: auto; 
+    /* Feste Höhe sichert den Button gegen Abschneiden ab */
+    height: 420px; 
+    position: relative;
 }
 #game-status {
     font-size: 20px;
@@ -124,9 +126,6 @@
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
     box-shadow: 0 4px 15px rgba(212,175,55,0.4);
-    margin-top: 5px;
-    /* Fester Abstand nach unten zur Box-Kante */
-    margin-bottom: 20px; 
 }
 #start-btn:hover {
     transform: scale(1.05);
@@ -140,20 +139,19 @@
 
 <script>
 let currentRound = 1;
-let ballSlot = 1; // Start in der Mitte
+let ballSlot = 1; 
 let isShuffling = false;
 let gameActive = false;
-let positions = [0, 1, 2]; // Fehler behoben!
+let positions = [0, 1, 2]; // FEHLER BEHOBEN!
 let shuffleCount = 0;
 const maxShuffles = 7;
-let isFirstRoundOfGame = true; // Kontrolliert das Intro beim allerersten Start
+let isFirstRoundOfGame = true; 
 
 function initRound() {
     isShuffling = false;
     gameActive = false;
     document.getElementById('start-btn').disabled = false;
     
-    // Becher senken und alle Items leeren
     for(let i=0; i<3; i++) {
         document.getElementById(`cup-${i}`).classList.remove('lifted');
         document.getElementById(`item-${i}`).className = 'item';
@@ -180,18 +178,14 @@ function handleStartButtonClick() {
 
 function startIntro() {
     document.getElementById('start-btn').disabled = true;
-    
-    // Schriftzug verschwinden lassen
     document.getElementById('magic-title').style.display = 'none';
     document.getElementById('game-status').innerText = "Konzentration...";
     
-    // Nach 2 Sekunden erscheint der Ball
     setTimeout(() => {
         const initialItem = document.getElementById(`item-${ballSlot}`);
         initialItem.classList.add('ball', 'visible');
         document.getElementById('game-status').innerText = `Runde ${currentRound} von 4: Merk dir den Ball!`;
         
-        // Nach weiteren 2 Sekunden wandert der Ball unter den Becher und das Spiel beginnt
         setTimeout(() => {
             isFirstRoundOfGame = false; 
             startGame();
@@ -271,7 +265,7 @@ function chooseCup(cupId) {
             
             startBtn.onclick = function() {
                 currentRound = 1;
-                positions = [0, 1, 2]; // Fehler behoben!
+                positions = [0, 1, 2]; // FEHLER BEHOBEN!
                 ballSlot = 1;
                 isFirstRoundOfGame = true; 
                 
