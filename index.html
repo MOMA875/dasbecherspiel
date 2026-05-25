@@ -22,33 +22,32 @@
 #shell-game-wrapper {
     background: #111;
     color: #fff;
-    padding: 30px;
+    padding: 15px;
     border-radius: 12px;
     text-align: center;
     font-family: 'Arial', sans-serif;
     max-width: 600px;
-    margin: 20px auto;
+    margin: 10px auto;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    overflow: hidden;
+    height: auto; 
 }
 #game-status {
-    font-size: 20px;
-    margin-bottom: 30px;
-    font-weight: bold;
-    min-height: 30px;
+    font-size: 18px;
+    margin-bottom: 15px;
+    min-height: 25px;
     color: #ffd700;
 }
 #game-container {
     display: flex;
     justify-content: space-around;
     position: relative;
-    height: 220px;
-    margin-bottom: 10px;
+    height: 170px;
+    margin-bottom: 5px;
 }
 .cup-slot {
     position: absolute;
-    width: 120px;
-    height: 200px;
+    width: 100px;
+    height: 160px;
     transition: left 0.4s ease-in-out;
 }
 #slot-0 { left: 5%; }
@@ -56,14 +55,14 @@
 #slot-2 { left: 70%; }
 
 .cup {
-    width: 100px;
-    height: 130px;
+    width: 85px;
+    height: 110px;
     background: linear-gradient(135deg, #e6e6e6 0%, #ffffff 30%, #999999 70%, #cccccc 100%);
-    border-radius: 40px 40px 10px 10px;
+    border-radius: 35px 35px 10px 10px;
     clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
     position: absolute;
     top: 0;
-    left: 10px;
+    left: 7px;
     z-index: 2;
     cursor: pointer;
     transition: transform 0.5s ease;
@@ -75,19 +74,19 @@
     top: 0;
     left: 15%;
     width: 70%;
-    height: 12px;
+    height: 10px;
     background: #999;
     border-radius: 50%;
 }
 .cup.lifted {
-    transform: translateY(-80px);
+    transform: translateY(-60px);
 }
 .item {
     position: absolute;
-    bottom: 20px;
-    left: 40px;
-    width: 40px;
-    height: 40px;
+    bottom: 15px;
+    left: 32px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     z-index: 1;
     opacity: 0;
@@ -109,22 +108,22 @@
 #magic-title {
     color: #ff4d4d;
     font-weight: bold;
-    font-size: 22px;
-    margin-bottom: 20px;
-    min-height: 26px;
+    font-size: 18px;
+    margin-bottom: 10px;
+    min-height: 22px;
 }
 #start-btn {
     background: linear-gradient(135deg, #ffd700, #d4af37);
     color: #111;
     border: none;
-    padding: 12px 30px;
-    font-size: 16px;
+    padding: 10px 25px;
+    font-size: 15px;
     font-weight: bold;
     border-radius: 25px;
     cursor: pointer;
     transition: transform 0.2s, opacity 0.2s;
     box-shadow: 0 4px 15px rgba(212,175,55,0.4);
-    margin-top: 10px;
+    margin-top: 5px;
 }
 #start-btn:hover {
     transform: scale(1.05);
@@ -138,27 +137,40 @@
 
 <script>
 let currentRound = 1;
-let ballSlot = 1; // Start in der Mitte
+let ballSlot = 1; 
 let isShuffling = false;
 let gameActive = false;
 let positions = [0, 1, 2];
 let shuffleCount = 0;
 const maxShuffles = 7;
-let isFirstRoundOfGame = true; // Kontrolliert das Intro beim allerersten Start
+let isFirstRoundOfGame = true; 
+
+// =========================================================================
+// NUR HIER EINTRAGEN:
+// =========================================================================
+const shuffleSound = new Audio('<span style="color:red; font-weight:bold;"> https://www.magic-mike-world.de/app/download/17052436824/BEcher++Sound+Schieben.mp3?t=1779711747 </span>'); 
+// =========================================================================
+
+shuffleSound.volume = 0.6; 
+let soundPlayedThisStep = false; 
+
+function unlockAudio() {
+    shuffleSound.play().then(() => {
+        shuffleSound.pause();
+        shuffleSound.currentTime = 0;
+    }).catch(err => console.log("Audio-Freischaltung blockiert:", err));
+}
 
 function initRound() {
     isShuffling = false;
     gameActive = false;
     document.getElementById('start-btn').disabled = false;
     
-    // Becher senken und alle Items leeren
     for(let i=0; i<3; i++) {
         document.getElementById(`cup-${i}`).classList.remove('lifted');
         document.getElementById(`item-${i}`).className = 'item';
     }
     
-    // Zeitlicher Ablauf wie im vorletzten Code: 
-    // Wenn es NICHT die erste Runde nach dem Intro/Reset ist, zeige den Ball sofort nach 600ms an
     if (!isFirstRoundOfGame) {
         setTimeout(() => {
             const initialItem = document.getElementById(`item-${ballSlot}`);
@@ -166,12 +178,12 @@ function initRound() {
             document.getElementById('game-status').innerText = `Runde ${currentRound} von 4: Merk dir den Ball!`;
         }, 600);
     } else {
-        // Bei der allerersten Runde bleibt der Ball unsichtbar, bis der Button geklickt wird
         document.getElementById('game-status').innerText = `Runde ${currentRound} von 4`;
     }
 }
 
 function handleStartButtonClick() {
+    unlockAudio();
     if (isFirstRoundOfGame) {
         startIntro();
     } else {
@@ -181,20 +193,16 @@ function handleStartButtonClick() {
 
 function startIntro() {
     document.getElementById('start-btn').disabled = true;
-    
-    // Schriftzug verschwinden lassen
     document.getElementById('magic-title').style.display = 'none';
     document.getElementById('game-status').innerText = "Konzentration...";
     
-    // Nach 2 Sekunden erscheint der Ball
     setTimeout(() => {
         const initialItem = document.getElementById(`item-${ballSlot}`);
         initialItem.classList.add('ball', 'visible');
         document.getElementById('game-status').innerText = `Runde ${currentRound} von 4: Merk dir den Ball!`;
         
-        // Nach weiteren 2 Sekunden wandert der Ball unter den Becher und das Spiel beginnt
         setTimeout(() => {
-            isFirstRoundOfGame = false; // Intro beendet, Folgerunden laufen normal
+            isFirstRoundOfGame = false; 
             startGame();
         }, 2000);
         
@@ -205,12 +213,10 @@ function startGame() {
     document.getElementById('start-btn').disabled = true;
     document.getElementById('game-status').innerText = "Konzentration...";
     
-    // Ball verstecken (Becher "virtuell" senken)
     for(let i=0; i<3; i++) {
         document.getElementById(`item-${i}`).classList.remove('visible');
     }
     
-    // Kurz warten, dann mischen starten (Zyklen wie im vorletzten Code)
     setTimeout(() => {
         isShuffling = true;
         shuffleCount = 0;
@@ -225,6 +231,8 @@ function doShuffle() {
         document.getElementById('game-status').innerText = "Wo ist der Ball? Klicke auf einen Becher!";
         return;
     }
+    
+    soundPlayedThisStep = false;
     
     let idx1 = Math.floor(Math.random() * 3);
     let idx2 = Math.floor(Math.random() * 3);
@@ -256,7 +264,6 @@ function chooseCup(cupId) {
     
     let clickedSlot = cupId; 
     
-    // In Runde 4: Überall Zitronen, kein Ball
     if (currentRound === 4) {
         for(let i=0; i<3; i++) {
             const item = document.getElementById(`item-${i}`);
@@ -265,7 +272,6 @@ function chooseCup(cupId) {
         }
         document.getElementById('game-status').innerText = "Simsalabim! Der Ball ist weg... dafür gibt es Zitronen! 🍋";
         
-        // Nach 2 Sekunden Becher wieder senken
         setTimeout(() => {
             for(let i=0; i<3; i++) {
                 document.getElementById(`cup-${i}`).classList.remove('lifted');
@@ -275,15 +281,15 @@ function chooseCup(cupId) {
             startBtn.disabled = false;
             
             startBtn.onclick = function() {
+                unlockAudio();
                 currentRound = 1;
                 positions = [0, 1, 2];
                 ballSlot = 1;
-                isFirstRoundOfGame = true; // Setzt den Intro-Modus für das neue Spiel zurück
+                isFirstRoundOfGame = true; 
                 
                 startBtn.innerText = "Spiel starten";
                 startBtn.onclick = handleStartButtonClick;
                 
-                // Titel wieder einblenden
                 document.getElementById('magic-title').style.display = 'block';
                 initRound();
             };
@@ -292,7 +298,6 @@ function chooseCup(cupId) {
         return;
     }
     
-    // Runden 1, 2 und 3: Normales Auflösen
     for(let i=0; i<3; i++) {
         document.getElementById(`cup-${i}`).classList.add('lifted');
     }
@@ -316,5 +321,19 @@ function chooseCup(cupId) {
 
 window.onload = function() {
     initRound();
+    
+    for (let i = 0; i < 3; i++) {
+        const slot = document.getElementById(`slot-${i}`);
+        
+        slot.addEventListener('transitionstart', (e) => {
+            if (isShuffling && e.propertyName === 'left' && !soundPlayedThisStep) {
+                soundPlayedThisStep = true; 
+                shuffleSound.currentTime = 0;
+                shuffleSound.play().catch(err => {
+                    console.log("Audio blockiert, warte auf Interaktion:", err);
+                });
+            }
+        });
+    }
 };
 </script>
