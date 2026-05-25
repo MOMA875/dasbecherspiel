@@ -146,20 +146,12 @@ const maxShuffles = 7;
 let isFirstRoundOfGame = true; 
 
 // =========================================================================
-// NUR HIER EINTRAGEN:
+// NUR HIER DEINEN GITHUB-LINK EINTRAGEN (Aktuell ist ein Test-Sound aktiv!):
 // =========================================================================
 const shuffleSound = new Audio('<span style="color:red; font-weight:bold;"> https://www.magic-mike-world.de/app/download/17052436824/BEcher++Sound+Schieben.mp3?t=1779711747 </span>'); 
 // =========================================================================
 
-shuffleSound.volume = 0.6; 
-let soundPlayedThisStep = false; 
-
-function unlockAudio() {
-    shuffleSound.play().then(() => {
-        shuffleSound.pause();
-        shuffleSound.currentTime = 0;
-    }).catch(err => console.log("Audio-Freischaltung blockiert:", err));
-}
+shuffleSound.volume = 0.4; 
 
 function initRound() {
     isShuffling = false;
@@ -183,7 +175,8 @@ function initRound() {
 }
 
 function handleStartButtonClick() {
-    unlockAudio();
+    // Erzwingt das Laden des Sounds direkt beim echten Knopfdruck
+    shuffleSound.load(); 
     if (isFirstRoundOfGame) {
         startIntro();
     } else {
@@ -232,7 +225,10 @@ function doShuffle() {
         return;
     }
     
-    soundPlayedThisStep = false;
+    // SOUND DIREKT BEIM MISCHSCHRITT ABSPIELEN
+    // Verhindert Browser-Blockaden komplett
+    shuffleSound.currentTime = 0;
+    shuffleSound.play().catch(err => console.log("Audio-Fehler:", err));
     
     let idx1 = Math.floor(Math.random() * 3);
     let idx2 = Math.floor(Math.random() * 3);
@@ -281,7 +277,6 @@ function chooseCup(cupId) {
             startBtn.disabled = false;
             
             startBtn.onclick = function() {
-                unlockAudio();
                 currentRound = 1;
                 positions = [0, 1, 2];
                 ballSlot = 1;
@@ -321,19 +316,5 @@ function chooseCup(cupId) {
 
 window.onload = function() {
     initRound();
-    
-    for (let i = 0; i < 3; i++) {
-        const slot = document.getElementById(`slot-${i}`);
-        
-        slot.addEventListener('transitionstart', (e) => {
-            if (isShuffling && e.propertyName === 'left' && !soundPlayedThisStep) {
-                soundPlayedThisStep = true; 
-                shuffleSound.currentTime = 0;
-                shuffleSound.play().catch(err => {
-                    console.log("Audio blockiert, warte auf Interaktion:", err);
-                });
-            }
-        });
-    }
 };
 </script>
